@@ -11,6 +11,9 @@
 // Add `mongodb` and `mongoose` to the project's `package.json`. Then require 
 // `mongoose`. Store your **mLab** database URI in the private `.env` file 
 // as `MONGO_URI`. Connect to the database using `mongoose.connect(<Your URI>)`
+const mongodb = require('mongodb');
+const mongoose = require('mongoose');
+mongoose.connect(process.env.MONGO_URI);
 
 
 /** # SCHEMAS and MODELS #
@@ -38,7 +41,15 @@
 
 // <Your code here >
 
-var Person /* = <Your Model> */
+const Schema = mongoose.Schema;
+
+const personSchema = new Schema({
+  name:{type: String,required: true},
+  age: Number,
+  favoriteFoods : [String]
+});
+const Person = mongoose.model('Person',personSchema);
+
 
 // **Note**: GoMix is a real server, and in real servers interactions with
 // the db are placed in handler functions, to be called when some event happens
@@ -58,6 +69,20 @@ var Person /* = <Your Model> */
 
 /** # [C]RUD part I - CREATE #
 /*  ========================== */
+
+var createPerson = (done)=>{
+  var cal = new Person({name: "cal", 
+                        age: 26, 
+                        favoriteFoods: ['Burritos','Tacos']});
+  cal.save((err,data)=>{
+    if(err){
+      return done(err);
+    }else{
+      return done (null,data);
+    }
+  })
+  
+}
 
 /** 3) Create and Save a Person */
 
